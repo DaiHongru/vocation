@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.freework.vocation.dao.VocationCategoryDao">
+
+    <select id="queryVocationCategoryTop" resultType="com.freework.vocation.entity.VocationCategory">
+        SELECT
+        vocation_category_id,
+        vocation_category_name,
+        parent_id,
+        create_time,
+        last_edit_time
+        FROM
+        tb_vocation_category
+        WHERE
+        parent_id is null
+    </select>
+
+    <select id="queryVocationCategorySecond" resultType="com.freework.vocation.entity.VocationCategory"
+            parameterType="INTEGER">
+        SELECT
+        vocation_category_id,
+        vocation_category_name,
+        parent_id,
+        create_time,
+        last_edit_time
+        FROM
+        tb_vocation_category
+        WHERE
+        parent_id=#{parentId}
+    </select>
+
+    <select id="queryVocationCategoryById" resultType="com.freework.vocation.entity.VocationCategory"
+            parameterType="INTEGER">
+        SELECT
+        vocation_category_id,
+        vocation_category_name,
+        parent_id,
+        create_time,
+        last_edit_time
+        FROM
+        tb_vocation_category
+        WHERE
+        vocation_category_id=#{vocationCategoryId}
+    </select>
+</mapper>

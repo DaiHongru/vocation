@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.freework.vocation.dao.VocationDao">
+
+    <insert id="addVocation" useGeneratedKeys="true"
+            keyProperty="vocationId" keyColumn="vocationId">
+		INSERT INTO
+		tb_vocation(
+		vocation_name,
+		status,
+		work_type,
+		min_salary,
+		max_salary,
+		profile,
+		create_time,
+		last_edit_time,
+		vocation_category_id,
+		enterprise_id,
+		welfare,
+		people_number,
+		experience,
+		education,
+		place)
+		VALUES
+		(#{vocationName},
+		#{status},
+		#{workType},
+		#{minSalary},
+		#{maxSalary},
+		#{profile},
+		#{createTime},
+		#{lastEditTime},
+		#{vocationCategoryId},
+		#{enterpriseId},
+		#{welfare},
+		#{peopleNumber},
+		#{experience},
+		#{education},
+		#{place}
+		)
+	</insert>
+
+    <select id="queryVocationByRequirement" resultType="com.freework.vocation.entity.Vocation"
+            parameterType="com.freework.vocation.entity.Vocation">
+        SELECT
+        vocation_id,
+        vocation_category_id,
+        enterprise_id,
+        vocation_name,
+        status,
+        work_type,
+        place,
+        people_number,
+        min_salary,
+        max_salary,
+        experience,
+        education,
+        profile,
+        welfare,
+        create_time,
+        last_edit_time
+        FROM
+        tb_vocation
+        <where>
+            <if test="enterpriseId !=null">
+                AND enterprise_id=#{enterpriseId}
+            </if>
+            <if test="vocationId !=null">
+                AND vocation_id=#{vocationId}
+            </if>
+            <if test="vocationCategoryId !=null">
+                AND vocation_category_id=#{vocationCategoryId}
+            </if>
+            <if test="vocationName !=null">
+                AND vocation_name LIKE CONCAT(CONCAT('%', #{vocationName}), '%')
+            </if>
+            <if test="minSalary !=null">
+                AND min_salary <![CDATA[>=]]> #{minSalary}
+            </if>
+            <if test="experience !=null">
+                AND experience=#{experience}
+            </if>
+            <if test="education !=null">
+                AND education=#{education}
+            </if>
+            <if test="place !=null">
+                AND place LIKE CONCAT(CONCAT('%', #{place}), '%')
+            </if>
+            <if test="status !=null">
+                AND status=#{status}
+            </if>
+        </where>
+        ORDER BY status DESC , last_edit_time DESC
+    </select>
+
+    <update id="updateVocationStatus" parameterType="com.freework.vocation.entity.Vocation">
+        UPDATE
+        tb_vocation
+        SET
+        status = ABS(status-1),
+        last_edit_time=#{lastEditTime}
+        WHERE
+        enterprise_id=#{enterpriseId}
+        AND
+        vocation_id = #{vocationId}
+    </update>
+
+    <delete id="deleteVocation" parameterType="com.freework.vocation.entity.Vocation">
+        DELETE
+        FROM
+        tb_vocation
+        WHERE
+        enterprise_id=#{enterpriseId}
+        AND
+        vocation_id = #{vocationId}
+    </delete>
+
+    <update id="updateVocation" parameterType="com.freework.vocation.entity.Vocation">
+        UPDATE
+        tb_vocation
+        SET
+        vocation_name=#{vocationName},
+		work_type=#{workType},
+		min_salary=#{minSalary},
+		max_salary=#{maxSalary},
+		profile=#{profile},
+		last_edit_time=#{lastEditTime},
+		vocation_category_id=#{vocationCategoryId},
+		enterprise_id=#{enterpriseId},
+	    welfare=#{welfare},
+		people_number=#{peopleNumber},
+		experience=#{experience},
+		education=#{education},
+		place=#{place},
+        last_edit_time=#{lastEditTime}
+        WHERE
+        enterprise_id=#{enterpriseId}
+        AND
+        vocation_id = #{vocationId}
+    </update>
+
+    <select id="queryVocationAll" resultType="com.freework.vocation.entity.Vocation">
+        SELECT
+        vocation_id,
+        vocation_category_id,
+        enterprise_id,
+        vocation_name,
+        status,
+        work_type,
+        people_number,
+        min_salary,
+        max_salary,
+        experience,
+        education,
+        profile,
+        welfare,
+        place,
+        create_time,
+        last_edit_time
+        FROM
+        tb_vocation
+        WHERE
+        status=1
+        ORDER BY create_time DESC
+    </select>
+</mapper>
