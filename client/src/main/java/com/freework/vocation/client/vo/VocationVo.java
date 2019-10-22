@@ -19,7 +19,7 @@ public class VocationVo implements Serializable {
     private Integer vocationCategoryId;
 
     /**
-     * 分类ID
+     * 分类名称
      */
     private String vocationCategoryName;
 
