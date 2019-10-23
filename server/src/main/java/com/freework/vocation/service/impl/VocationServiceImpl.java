@@ -59,6 +59,13 @@ public class VocationServiceImpl implements VocationService {
     }
 
     @Override
+    @HystrixCommand(commandProperties = {
+            @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "1000"),
+            @HystrixProperty(name = "circuitBreaker.enabled", value = "true"),
+            @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "3"),
+            @HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds", value = "5000"),
+            @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "60")
+    })
     public ResultVo queryVocationById(Integer vocationId) {
         if (vocationId == null || vocationId <= 0) {
             return ResultUtil.error(ResultStatusEnum.BAD_REQUEST);
@@ -74,17 +81,20 @@ public class VocationServiceImpl implements VocationService {
             vocationVo.setVocationCategoryName(
                     vocationCategoryDao.queryVocationCategoryById(vocationVo.getVocationCategoryId())
                             .getVocationCategoryName());
+            EnterpriseVo enterpriseVo = enterpriseClient.getEnterpriseById(vocationVo.getEnterpriseId());
+            vocationVo.setLogo(enterpriseVo.getLogo());
+            vocationVo.setEnterpriseName(enterpriseVo.getEnterpriseName());
             return ResultUtil.success(vocationVo);
         }
     }
 
     @Override
-    public ResultVo searchVocation(Vocation vocation,Integer pageNum, Integer pageSize) {
-        if(vocation==null || pageNum == null || pageSize == null){
+    public ResultVo searchVocation(Vocation vocation, Integer pageNum, Integer pageSize) {
+        if (vocation == null || pageNum == null || pageSize == null) {
             return ResultUtil.error(ResultStatusEnum.BAD_REQUEST);
         }
         PageHelper.startPage(pageNum, pageSize);
-        List<Vocation> vocationList=vocationDao.queryVocationByRequirement(vocation);
+        List<Vocation> vocationList = vocationDao.queryVocationByRequirement(vocation);
         if (vocationList == null || vocationList.size() == 0) {
             return ResultUtil.error(ResultStatusEnum.NOT_FOUND);
         }
@@ -104,8 +114,8 @@ public class VocationServiceImpl implements VocationService {
             @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "1000"),
             @HystrixProperty(name = "circuitBreaker.enabled", value = "true"),
             @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "3"),
-			@HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds", value = "5000"),
-			@HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "60")
+            @HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds", value = "5000"),
+            @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "60")
     })
     public ResultVo queryVocationByPagination(Integer pageNum, Integer pageSize) {
         if (pageNum == null || pageSize == null) {
