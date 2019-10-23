@@ -40,6 +40,13 @@ public class VocationController {
         return vocationService.queryVocationByPagination(pageNum, pageSize);
     }
 
+    /**
+     * 搜索招聘信息
+     *
+     * @param vocation
+     * @param request
+     * @return
+     */
     @PostMapping(value = "searchs")
     public ResultVo searchVocation(@RequestBody Vocation vocation, HttpServletRequest request) {
         Integer pageNum = request.getIntHeader("pageNum");

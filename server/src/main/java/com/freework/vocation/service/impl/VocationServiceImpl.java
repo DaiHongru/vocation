@@ -12,6 +12,7 @@ import com.freework.vocation.client.vo.VocationVo;
 import com.freework.vocation.dao.VocationCategoryDao;
 import com.freework.vocation.dao.VocationDao;
 import com.freework.vocation.entity.Vocation;
+import com.freework.vocation.enums.VocationStateEnum;
 import com.freework.vocation.service.VocationService;
 import com.github.pagehelper.PageHelper;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
@@ -94,6 +95,7 @@ public class VocationServiceImpl implements VocationService {
             return ResultUtil.error(ResultStatusEnum.BAD_REQUEST);
         }
         PageHelper.startPage(pageNum, pageSize);
+        vocation.setStatus(VocationStateEnum.ONGOING.getState());
         List<Vocation> vocationList = vocationDao.queryVocationByRequirement(vocation);
         if (vocationList == null || vocationList.size() == 0) {
             return ResultUtil.error(ResultStatusEnum.NOT_FOUND);
