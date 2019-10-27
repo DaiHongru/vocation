@@ -45,54 +45,60 @@
     <select id="queryVocationByRequirement" resultType="com.freework.vocation.entity.Vocation"
             parameterType="com.freework.vocation.entity.Vocation">
         SELECT
-        vocation_id,
-        vocation_category_id,
-        enterprise_id,
-        vocation_name,
-        status,
-        work_type,
-        place,
-        people_number,
-        min_salary,
-        max_salary,
-        experience,
-        education,
-        profile,
-        welfare,
-        create_time,
-        last_edit_time
+        tv.vocation_id,
+        tv.vocation_category_id,
+        tv.enterprise_id,
+        tv.vocation_name,
+        tv.status,
+        tv.work_type,
+        tv.place,
+        tv.people_number,
+        tv.min_salary,
+        tv.max_salary,
+        tv.experience,
+        tv.education,
+        tv.profile,
+        tv.welfare,
+        tv.create_time,
+        tv.last_edit_time,
+        te.enterprise_name
         FROM
-        tb_vocation
+        tb_vocation tv,
+        tb_enterprise te
         <where>
             <if test="enterpriseId !=null">
-                AND enterprise_id=#{enterpriseId}
+                AND tv.enterprise_id=#{enterpriseId}
             </if>
             <if test="vocationId !=null">
-                AND vocation_id=#{vocationId}
+                AND tv.vocation_id=#{vocationId}
             </if>
             <if test="vocationCategoryId !=null">
-                AND vocation_category_id=#{vocationCategoryId}
+                AND tv.vocation_category_id=#{vocationCategoryId}
             </if>
             <if test="vocationName !=null">
-                AND vocation_name LIKE CONCAT(CONCAT('%', #{vocationName}), '%')
+                AND tv.vocation_name LIKE CONCAT(CONCAT('%', #{vocationName}), '%')
             </if>
             <if test="minSalary !=null">
-                AND min_salary <![CDATA[>=]]> #{minSalary}
+                AND tv.min_salary <![CDATA[>=]]> #{minSalary}
             </if>
             <if test="experience !=null">
-                AND experience=#{experience}
+                AND tv.experience=#{experience}
             </if>
             <if test="education !=null">
-                AND education=#{education}
+                AND tv.education=#{education}
             </if>
             <if test="place !=null">
-                AND place LIKE CONCAT(CONCAT('%', #{place}), '%')
+                AND tv.place LIKE CONCAT(CONCAT('%', #{place}), '%')
             </if>
             <if test="status !=null">
-                AND status=#{status}
+                AND tv.status=#{status}
             </if>
+            <if test="enterpriseName !=null">
+                AND te.enterprise_name LIKE CONCAT(CONCAT('%', #{enterpriseName}), '%')
+            </if>
+            AND tv.enterprise_id=te.enterprise_id
         </where>
-        ORDER BY status DESC , last_edit_time DESC
+        ORDER BY tv.status DESC , tv.last_edit_time DESC
     </select>
 
     <update id="updateVocationStatus" parameterType="com.freework.vocation.entity.Vocation">

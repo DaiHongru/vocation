@@ -24,6 +24,11 @@ public class Vocation {
     private Integer enterpriseId;
 
     /**
+     * 企业名称，数据库无此字段
+     */
+    private String enterpriseName;
+
+    /**
      * 岗位名称，不可为空
      */
     private String vocationName;
@@ -229,5 +234,13 @@ public class Vocation {
 
     public void setPlace(String place) {
         this.place = place;
+    }
+
+    public String getEnterpriseName() {
+        return enterpriseName;
+    }
+
+    public void setEnterpriseName(String enterpriseName) {
+        this.enterpriseName = enterpriseName;
     }
 }
